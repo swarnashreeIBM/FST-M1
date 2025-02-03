@@ -1,10 +1,13 @@
-package activities;
+package com.project.activity;
 
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -14,53 +17,33 @@ import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.options.UiAutomator2Options;
 
 public class Activity2 {
-	// Driver Declaration
 	AndroidDriver driver;
 
-	// Set up method
 	@BeforeClass
 	public void setUp() throws MalformedURLException, URISyntaxException {
-		// Desired Capabilities
 		UiAutomator2Options options = new UiAutomator2Options();
 		options.setPlatformName("android");
 		options.setAutomationName("UiAutomator2");
-		options.setAppPackage("com.android.chrome");
-		options.setAppActivity("com.google.android.apps.chrome.Main");
+		options.setAppPackage("com.google.android.keep");
+		options.setAppActivity(".activities.BrowseActivity");
 		options.noReset();
-
-		// Set the Appium server URL
 		URL serverURL = new URI("http://localhost:4723").toURL();
-
-		// Driver Initialization
 		driver = new AndroidDriver(serverURL, options);
-
-		// Open the page in Chrome
-		driver.get("https://training-support.net");
 	}
 
-	// Test method
-	@Test
-	public void chromeTest() {
-		// Find heading on the page
-		String pageHeading = driver.findElement(AppiumBy.xpath("//android.widget.TextView[@text='Training Support']"))
-				.getText();
-
-		// Print to console
-		System.out.println("Heading: " + pageHeading);
-
-		// Find and click the About Us link
-		driver.findElement(AppiumBy.accessibilityId("About Us")).click();
-
-		// Find heading of new page and print to console
-		String aboutPageHeading = driver.findElement(AppiumBy.xpath("//android.widget.TextView[@text='About Us']"))
-				.getText();
-		System.out.println(aboutPageHeading);
+	@Test(priority = 1)
+	public void addNote() throws InterruptedException {
+		driver.findElement(AppiumBy.id("speed_dial_create_close_button")).click();
+		driver.findElement(AppiumBy.id("new_note_button")).click();
+		driver.findElement(AppiumBy.id("editable_title")).sendKeys("My First Note");
+		driver.findElement(AppiumBy.id("edit_note_text")).sendKeys("My First Note's Description");
+		driver.findElement(AppiumBy.xpath("//android.widget.ImageButton[@content-desc='Navigate up']")).click();
+		String des = driver.findElement(AppiumBy.id("index_note_title")).getText();
+		System.out.println(des);
+		Assert.assertEquals(des, "My First Note");
 	}
-
-	// Tear down method
 	@AfterClass
 	public void tearDown() {
-		// Close the app
 		driver.quit();
 	}
 }
