@@ -1,4 +1,4 @@
-package activities;
+package com.appiumActivity;
 
 import java.net.MalformedURLException;
 import java.net.URI;
@@ -14,53 +14,35 @@ import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.options.UiAutomator2Options;
 
 public class Activity2 {
-	// Driver Declaration
-	AndroidDriver driver;
-
-	// Set up method
-	@BeforeClass
-	public void setUp() throws MalformedURLException, URISyntaxException {
-		// Desired Capabilities
-		UiAutomator2Options options = new UiAutomator2Options();
-		options.setPlatformName("android");
-		options.setAutomationName("UiAutomator2");
-		options.setAppPackage("com.android.chrome");
-		options.setAppActivity("com.google.android.apps.chrome.Main");
-		options.noReset();
-
-		// Set the Appium server URL
-		URL serverURL = new URI("http://localhost:4723").toURL();
-
-		// Driver Initialization
-		driver = new AndroidDriver(serverURL, options);
-
-		// Open the page in Chrome
-		driver.get("https://training-support.net");
-	}
-
-	// Test method
-	@Test
-	public void chromeTest() {
-		// Find heading on the page
-		String pageHeading = driver.findElement(AppiumBy.xpath("//android.widget.TextView[@text='Training Support']"))
-				.getText();
-
-		// Print to console
-		System.out.println("Heading: " + pageHeading);
-
-		// Find and click the About Us link
-		driver.findElement(AppiumBy.accessibilityId("About Us")).click();
-
-		// Find heading of new page and print to console
-		String aboutPageHeading = driver.findElement(AppiumBy.xpath("//android.widget.TextView[@text='About Us']"))
-				.getText();
-		System.out.println(aboutPageHeading);
-	}
-
-	// Tear down method
-	@AfterClass
-	public void tearDown() {
-		// Close the app
-		driver.quit();
-	}
+    AndroidDriver driver;
+    @BeforeClass
+    public void setUp() throws MalformedURLException, URISyntaxException {
+        // Desired Capabilities
+        UiAutomator2Options options = new UiAutomator2Options();
+        options.setPlatformName("android");
+        options.setAutomationName("UiAutomator2");
+        options.setAppPackage("com.android.chrome");
+        options.setAppActivity("com.google.android.apps.chrome.Main");
+        URL serverURL = new URI("http://localhost:4723").toURL();
+        driver = new AndroidDriver(serverURL, options);
+        driver.get("https://training-support.net");
+    }
+ 
+    @Test
+    public void chromeTest() {
+        String pageHeading = driver.findElement(AppiumBy.xpath(
+                "//android.widget.TextView[@text='Training Support']"
+        )).getText();
+        System.out.println("Heading: " + pageHeading);
+        driver.findElement(AppiumBy.accessibilityId("About Us")).click();
+        String aboutPageHeading = driver.findElement(AppiumBy.xpath(
+                "//android.widget.TextView[@text='About Us']"
+        )).getText();
+        System.out.println(aboutPageHeading);
+    }
+ 
+    @AfterClass
+    public void tearDown() {
+        driver.quit();
+    }
 }
